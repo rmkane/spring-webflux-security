@@ -17,6 +17,10 @@ import io.r2dbc.spi.ConnectionFactory;
 @EnableR2dbcRepositories(basePackages = "org.acme.persistence.repository")
 public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
+    private static final String R2DBC_POSTGRESQL_PREFIX = "r2dbc:postgresql://";
+    private static final int DEFAULT_POSTGRES_PORT = 5432;
+    private static final String DEFAULT_DATABASE_NAME = "webflux_db";
+
     @Value("${spring.r2dbc.url}")
     private String r2dbcUrl;
 
@@ -30,12 +34,12 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         // Parse the R2DBC URL: r2dbc:postgresql://localhost:5432/webflux_db
-        String url = r2dbcUrl.replace("r2dbc:postgresql://", "");
+        String url = r2dbcUrl.replace(R2DBC_POSTGRESQL_PREFIX, "");
         String[] parts = url.split("/");
         String[] hostPort = parts[0].split(":");
         String host = hostPort[0];
-        int port = hostPort.length > 1 ? Integer.parseInt(hostPort[1]) : 5432;
-        String database = parts.length > 1 ? parts[1] : "webflux_db";
+        int port = hostPort.length > 1 ? Integer.parseInt(hostPort[1]) : DEFAULT_POSTGRES_PORT;
+        String database = parts.length > 1 ? parts[1] : DEFAULT_DATABASE_NAME;
 
         return new PostgresqlConnectionFactory(
                 PostgresqlConnectionConfiguration.builder()
