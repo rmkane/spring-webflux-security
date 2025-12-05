@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: webflux-app
+  
+  # Database Configuration
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/webflux_db
+    username: webflux_user
+    password: webflux_password
+  
+  # Flyway Configuration
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    url: jdbc:postgresql://localhost:5432/webflux_db
+    user: webflux_user
+    password: webflux_password
+    baseline-on-migrate: true
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.example: INFO
+    io.r2dbc: DEBUG
+
