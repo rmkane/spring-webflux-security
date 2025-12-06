@@ -2,6 +2,7 @@ package org.acme.api.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -9,9 +10,12 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -24,16 +28,25 @@ import org.acme.api.dto.ProductResponse;
 import org.acme.api.service.ProductService;
 
 @WebFluxTest(controllers = ProductController.class, excludeAutoConfiguration = {
-        org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration.class
+        ReactiveSecurityAutoConfiguration.class
 })
-@Import(TestSecurityConfig.class)
+@Import({ TestSecurityConfig.class, ProductControllerTest.TestConfig.class })
 class ProductControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @MockBean
+    @Autowired
     private ProductService productService;
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        @Primary
+        ProductService productService() {
+            return mock(ProductService.class);
+        }
+    }
 
     @Test
     void getAllProducts_ShouldReturnProducts() {

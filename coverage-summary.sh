@@ -2,6 +2,7 @@
 
 # Script to display aggregated coverage summary in console
 
+echo ""
 echo "========================================================================"
 echo "JaCoCo Coverage Summary"
 echo "========================================================================"
