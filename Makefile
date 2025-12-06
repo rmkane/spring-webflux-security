@@ -5,7 +5,7 @@
 		build clean full-clean \
 		start stop restart \
 		db-up db-down db-logs db-reset \
-		test coverage coverage-check \
+		test coverage coverage-check coverage-summary \
 		format lint
 
 
@@ -75,6 +75,9 @@ coverage-check: ## Run tests and check coverage threshold
 	@echo "Running tests and checking coverage..."
 	mvn clean test jacoco:check -rf app-parent
 	@echo "Coverage check passed"
+
+coverage-summary: ## Display aggregated coverage summary in console
+	@./coverage-summary.sh
 
 # Code quality targets
 format: ## Format code using Spotless
