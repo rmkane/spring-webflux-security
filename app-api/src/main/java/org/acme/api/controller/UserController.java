@@ -2,6 +2,7 @@ package org.acme.api.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<UserResponse> getUserById(@PathVariable("id") Long id) {
+    public Mono<UserResponse> getUserById(@PathVariable("id") @NonNull Long id) {
         return userService.getUserById(id);
     }
 
@@ -40,13 +41,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public Mono<UserResponse> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest request) {
+    public Mono<UserResponse> updateUser(@PathVariable("id") @NonNull Long id, @RequestBody UserRequest request) {
         return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteUser(@PathVariable("id") Long id) {
+    public Mono<Void> deleteUser(@PathVariable("id") @NonNull Long id) {
         return userService.deleteUser(id);
     }
 }

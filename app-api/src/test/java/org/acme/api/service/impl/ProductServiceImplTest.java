@@ -81,6 +81,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createProduct_ShouldReturnCreatedProduct() {
         when(productMapper.toEntity(productRequest)).thenReturn(product);
         when(productRepository.save(any(Product.class))).thenReturn(Mono.just(product));
@@ -96,6 +97,7 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateProduct_ShouldReturnUpdatedProduct() {
         Long productId = 1L;
         when(productRepository.findById(productId)).thenReturn(Mono.just(product));

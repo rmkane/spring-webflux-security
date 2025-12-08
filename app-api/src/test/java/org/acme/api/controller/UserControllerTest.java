@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import reactor.core.publisher.Flux;
@@ -31,6 +32,10 @@ import org.acme.api.service.UserService;
 })
 @Import({ TestSecurityConfig.class, UserControllerTest.TestConfig.class })
 class UserControllerTest {
+
+    @SuppressWarnings("null")
+    @NonNull
+    private static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -58,10 +63,10 @@ class UserControllerTest {
 
         webTestClient.get()
                 .uri("/api/users")
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBodyList(UserResponse.class)
                 .hasSize(2);
     }
@@ -76,10 +81,10 @@ class UserControllerTest {
 
         webTestClient.get()
                 .uri("/api/users/{id}", userId)
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(UserResponse.class)
                 .isEqualTo(user);
     }
@@ -94,16 +99,17 @@ class UserControllerTest {
 
         webTestClient.post()
                 .uri("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(UserResponse.class)
                 .isEqualTo(response);
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateUser_ShouldReturnUpdatedUser() {
         Long userId = 1L;
         UserRequest request = new UserRequest("user1", "user1@example.com", "John", "Updated");
@@ -114,11 +120,11 @@ class UserControllerTest {
 
         webTestClient.put()
                 .uri("/api/users/{id}", userId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(UserResponse.class)
                 .isEqualTo(response);
     }

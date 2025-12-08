@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,10 +76,12 @@ class ProductRepositoryTest {
         Product product = new Product(null, "Test Product", "Test Description", BigDecimal.valueOf(10.99), 100, now,
                 now);
         Product savedProduct = productRepository.save(product).block();
+        assertNotNull(savedProduct);
+        Long productId = Objects.requireNonNull(savedProduct.getId(), "Product ID must not be null");
 
-        StepVerifier.create(productRepository.findById(savedProduct.getId()))
+        StepVerifier.create(productRepository.findById(productId))
                 .assertNext(foundProduct -> {
-                    assertEquals(savedProduct.getId(), foundProduct.getId());
+                    assertEquals(productId, foundProduct.getId());
                     assertEquals("Test Product", foundProduct.getName());
                     assertEquals(BigDecimal.valueOf(10.99), foundProduct.getPrice());
                 })
@@ -112,11 +115,13 @@ class ProductRepositoryTest {
         Product product = new Product(null, "Test Product", "Test Description", BigDecimal.valueOf(10.99), 100, now,
                 now);
         Product savedProduct = productRepository.save(product).block();
+        assertNotNull(savedProduct);
+        Long productId = Objects.requireNonNull(savedProduct.getId(), "Product ID must not be null");
 
-        StepVerifier.create(productRepository.deleteById(savedProduct.getId()))
+        StepVerifier.create(productRepository.deleteById(productId))
                 .verifyComplete();
 
-        StepVerifier.create(productRepository.findById(savedProduct.getId()))
+        StepVerifier.create(productRepository.findById(productId))
                 .verifyComplete();
     }
 }

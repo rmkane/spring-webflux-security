@@ -79,6 +79,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void createUser_ShouldReturnCreatedUser() {
         when(userMapper.toEntity(userRequest)).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user));
@@ -94,6 +95,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateUser_ShouldReturnUpdatedUser() {
         Long userId = 1L;
         when(userRepository.findById(userId)).thenReturn(Mono.just(user));

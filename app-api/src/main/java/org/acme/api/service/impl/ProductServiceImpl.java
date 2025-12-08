@@ -2,6 +2,7 @@ package org.acme.api.service.impl;
 
 import java.time.LocalDateTime;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductResponse> getProductById(Long id) {
+    public Mono<ProductResponse> getProductById(@NonNull Long id) {
         return productRepository.findById(id)
                 .map(productMapper::toResponse);
     }
@@ -48,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<ProductResponse> updateProduct(Long id, ProductRequest request) {
+    public Mono<ProductResponse> updateProduct(@NonNull Long id, ProductRequest request) {
         return productRepository.findById(id)
                 .flatMap(existingProduct -> {
                     productMapper.updateEntityFromRequest(request, existingProduct);
@@ -59,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Mono<Void> deleteProduct(Long id) {
+    public Mono<Void> deleteProduct(@NonNull Long id) {
         return productRepository.deleteById(id);
     }
 }

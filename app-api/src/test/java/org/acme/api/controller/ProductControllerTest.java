@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import reactor.core.publisher.Flux;
@@ -32,6 +33,10 @@ import org.acme.api.service.ProductService;
 })
 @Import({ TestSecurityConfig.class, ProductControllerTest.TestConfig.class })
 class ProductControllerTest {
+
+    @SuppressWarnings("null")
+    @NonNull
+    private static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -59,10 +64,10 @@ class ProductControllerTest {
 
         webTestClient.get()
                 .uri("/api/products")
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBodyList(ProductResponse.class)
                 .hasSize(2);
     }
@@ -78,10 +83,10 @@ class ProductControllerTest {
 
         webTestClient.get()
                 .uri("/api/products/{id}", productId)
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(ProductResponse.class)
                 .isEqualTo(product);
     }
@@ -96,16 +101,17 @@ class ProductControllerTest {
 
         webTestClient.post()
                 .uri("/api/products")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(ProductResponse.class)
                 .isEqualTo(response);
     }
 
     @Test
+    @SuppressWarnings("null")
     void updateProduct_ShouldReturnUpdatedProduct() {
         Long productId = 1L;
         ProductRequest request = new ProductRequest("Updated Product", "Updated Description", BigDecimal.valueOf(15.99),
@@ -118,11 +124,11 @@ class ProductControllerTest {
 
         webTestClient.put()
                 .uri("/api/products/{id}", productId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(ProductResponse.class)
                 .isEqualTo(response);
     }

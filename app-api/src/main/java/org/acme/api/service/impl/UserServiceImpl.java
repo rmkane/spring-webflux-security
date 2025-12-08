@@ -2,6 +2,7 @@ package org.acme.api.service.impl;
 
 import java.time.LocalDateTime;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<UserResponse> getUserById(Long id) {
+    public Mono<UserResponse> getUserById(@NonNull Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toResponse);
     }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<UserResponse> updateUser(Long id, UserRequest request) {
+    public Mono<UserResponse> updateUser(@NonNull Long id, UserRequest request) {
         return userRepository.findById(id)
                 .flatMap(existingUser -> {
                     userMapper.updateEntityFromRequest(request, existingUser);
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<Void> deleteUser(Long id) {
+    public Mono<Void> deleteUser(@NonNull Long id) {
         return userRepository.deleteById(id);
     }
 }

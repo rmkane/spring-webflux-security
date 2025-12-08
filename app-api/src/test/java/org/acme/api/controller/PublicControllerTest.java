@@ -6,12 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @WebFluxTest(controllers = PublicController.class, excludeAutoConfiguration = {
         org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration.class
 })
 class PublicControllerTest {
+
+    @SuppressWarnings("null")
+    @NonNull
+    private static final MediaType APPLICATION_JSON = MediaType.APPLICATION_JSON;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -20,10 +25,10 @@ class PublicControllerTest {
     void health_ShouldReturnHealthStatus() {
         webTestClient.get()
                 .uri("/api/public/health")
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(Map.class)
                 .value(map -> {
                     assert map.get("status").equals("UP");
@@ -35,10 +40,10 @@ class PublicControllerTest {
     void info_ShouldReturnApplicationInfo() {
         webTestClient.get()
                 .uri("/api/public/info")
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody(Map.class)
                 .value(map -> {
                     assert map.get("name").equals("Spring WebFlux Security Application");

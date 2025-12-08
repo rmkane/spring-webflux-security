@@ -2,6 +2,7 @@ package org.acme.api.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ProductResponse> getProductById(@PathVariable("id") Long id) {
+    public Mono<ProductResponse> getProductById(@PathVariable("id") @NonNull Long id) {
         return productService.getProductById(id);
     }
 
@@ -40,13 +41,13 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ProductResponse> updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequest request) {
+    public Mono<ProductResponse> updateProduct(@PathVariable("id") @NonNull Long id, @RequestBody ProductRequest request) {
         return productService.updateProduct(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteProduct(@PathVariable("id") Long id) {
+    public Mono<Void> deleteProduct(@PathVariable("id") @NonNull Long id) {
         return productService.deleteProduct(id);
     }
 }

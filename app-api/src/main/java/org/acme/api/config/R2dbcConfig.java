@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.lang.NonNull;
 
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
@@ -32,6 +33,7 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
     @Override
     @Bean
+    @NonNull
     public ConnectionFactory connectionFactory() {
         // Parse the R2DBC URL: r2dbc:postgresql://localhost:5432/webflux_db
         String url = r2dbcUrl.replace(R2DBC_POSTGRESQL_PREFIX, "");

@@ -4,7 +4,7 @@
 .PHONY: help \
 		build clean full-clean \
 		start stop restart \
-		db-up db-down db-logs db-reset \
+		db-up db-down db-logs db-reset db-shell \
 		test coverage coverage-check coverage-summary \
 		format lint
 
@@ -27,7 +27,7 @@ clean: ## Clean build artifacts
 	mvn clean
 
 full-clean: clean ## Clean everything including Docker volumes
-	docker-compose down -v
+	docker compose down -v
 	@echo "Full clean complete"
 
 # Application targets
@@ -47,20 +47,24 @@ restart: stop start ## Restart the application
 # Database targets
 db-up: ## Start PostgreSQL database
 	@echo "Starting PostgreSQL database..."
-	docker-compose up -d postgres
+	docker compose up -d postgres
 	@echo "Waiting for database to be ready..."
 	@sleep 5
-	@docker-compose ps
+	@docker compose ps
 
 db-down: ## Stop PostgreSQL database
 	@echo "Stopping PostgreSQL database..."
-	docker-compose down
+	docker compose down
 
 db-logs: ## Show database logs
-	docker-compose logs -f postgres
+	docker compose logs -f postgres
 
 db-reset: db-down db-up ## Reset database (stop and start)
 	@echo "Database reset complete"
+
+db-shell: ## Open PostgreSQL shell
+	@echo "Connecting to PostgreSQL database..."
+	@docker compose exec postgres psql -U webflux_user -d webflux_db
 
 # Test targets
 test: ## Run tests

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,10 +73,12 @@ class UserRepositoryTest {
         LocalDateTime now = LocalDateTime.now();
         User user = new User(null, "testuser", "test@example.com", "Test", "User", now, now);
         User savedUser = userRepository.save(user).block();
+        assertNotNull(savedUser);
+        Long userId = Objects.requireNonNull(savedUser.getId(), "User ID must not be null");
 
-        StepVerifier.create(userRepository.findById(savedUser.getId()))
+        StepVerifier.create(userRepository.findById(userId))
                 .assertNext(foundUser -> {
-                    assertEquals(savedUser.getId(), foundUser.getId());
+                    assertEquals(userId, foundUser.getId());
                     assertEquals("testuser", foundUser.getUsername());
                     assertEquals("test@example.com", foundUser.getEmail());
                 })
@@ -142,11 +145,13 @@ class UserRepositoryTest {
         LocalDateTime now = LocalDateTime.now();
         User user = new User(null, "testuser", "test@example.com", "Test", "User", now, now);
         User savedUser = userRepository.save(user).block();
+        assertNotNull(savedUser);
+        Long userId = Objects.requireNonNull(savedUser.getId(), "User ID must not be null");
 
-        StepVerifier.create(userRepository.deleteById(savedUser.getId()))
+        StepVerifier.create(userRepository.deleteById(userId))
                 .verifyComplete();
 
-        StepVerifier.create(userRepository.findById(savedUser.getId()))
+        StepVerifier.create(userRepository.findById(userId))
                 .verifyComplete();
     }
 }
